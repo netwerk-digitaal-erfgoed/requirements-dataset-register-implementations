@@ -1,26 +1,210 @@
 <pre class='metadata'>
-Title: Your Spec Title
-Shortname: your-spec
+Title: Requirements for Dataset Register Implementations
+Shortname: nde-dataset-register-implementations
 Level: 1
 Status: LS
 !Version: 0.0.0
 Markup Shorthands: css yes, markdown yes
-URL: http://example.com/url-this-spec-will-live-at
-Editor: Your Name, Your Company http://example.com/your-company, your-email@example.com, http://example.com/your-personal-website
-Abstract: A short description of your spec, one or two sentences.
+URL: https://docs.nde.nl/requirements-dataset-register-implementations/
+Editor: David de Boer, Netwerk Digitaal Erfgoed https://www.netwerkdigitaalerfgoed.nl, david@ddeboer.nl, https://github.com/ddeboer
+Abstract: This document describes requirements for implementing the [Dataset Register API](https://datasetregister.netwerkdigitaalerfgoed.nl/api/) in collection management systems. By following these requirements, vendors enable users to efficiently publish dataset descriptions from their collection management system.
 </pre>
 
 Introduction {#intro}
 =====================
 
-Introduction here.
+*This section is non-normative.*
+
+The [[NDE-CMS#DatasetRegister|Requirements for Collection Management Systems]] include
+a general obligation for vendors to implement the [=Dataset Register=] API in their collection management systems.
+However, feedback from users of these systems, as well as questions from vendors, has shown the need for more detailed guidance.
+The requirements below provide such guidance, specifying in more detail the steps needed for performant
+and user-friendly implementations of the [=Dataset Register=]. The goal is to help both users and vendors.
+
+Heritage institutions can use these requirements during procurement as a checklist
+to evaluate [=collection management systems=], or to encourage their current [=vendor=] to offer the
+functionality described here.
+
+This document is a counterpart to [[nde-network-of-terms-implementations]], which provides similar guidance
+for implementing the Network of Terms API.
+
+Definitions {#definitions}
+===========
+
+: <dfn>Collection manager</dfn>
+:: A person who creates metadata records in a [=collection management system=] and creates dataset descriptions, without requiring technical knowledge.
+
+: <dfn>Collection management system</dfn>
+:: A software application for creating, editing, and publishing metadata records that implements the [=Dataset Register=] API.
+
+: <dfn>Dataset Register</dfn>
+:: An NDE service that allows institutions to register and publish dataset descriptions, making them findable through the [Dataset Register API](https://datasetregister.netwerkdigitaalerfgoed.nl/api/)
+    and visible on the Dataset Register [website](https://datasetregister.netwerkdigitaalerfgoed.nl/en/datasets).
+
+: <dfn>Registration URL</dfn>
+:: A URL submitted to the [=Dataset Register=] API that points to one or more dataset descriptions. The [=Dataset Register=] fetches and validates the descriptions found at this URL, and periodically re-crawls it to pick up changes.
+
+: <dfn>Vendor</dfn>
+:: An organization that supplies a [=collection management system=].
+
+Requirements {#requirements}
+============
+
+These requirements are organized into two groups: managing [[NDE-DATASETS#dataset-description|dataset descriptions]] and [[NDE-DATASETS#distribution|distributions]].
+
+Manage dataset descriptions {#manage}
+---------------------------
+
+### Create datasets ### {#create}
+
+> [=Collection managers=] *MUST* be able to create datasets  by themselves in the [=collection management system=]
+> without requiring technical knowledge.
+They *MUST* be able to select heritage objects to be included
+> in datasets, either manually or through filters (such as terms) that automatically include matching objects.
+
+This gives collection managers the ability to determine the boundaries of their datasets,
+and to decide between (e.g.) creating a single large dataset or any number of smaller datasets.
+Dynamic selections (e.g. filters based on terms or object types) allow newly matching objects
+to be included in the dataset automatically.
+
+### Edit dataset descriptions ### {#edit}
+
+> [=Collection managers=] *MUST* be able to edit all [[NDE-DATASETS#overview|required and recommended attributes]]
+> for datasets and organizations without requiring technical knowledge.
+
+This gives collection managers full control over their dataset descriptions: 
+required properties are needed to create valid dataset descriptions right now;
+recommended properties create richer descriptions and enable future-proofing,
+because they may become required in the future.
+
+### Required fields ### {#required}
+
+> [=Collection management systems=] *MUST* mark required attributes as such to [=collection managers=].
+
+This helps [=collection managers=] distinguish between fields that are needed for a valid dataset description
+and fields that are recommended but optional.
+
+### Enforce valid input ### {#enforce-valid-input}
+
+> [=Collection management systems=] *MUST* enforce valid attributes to be entered.
+> In particular:
+>
+> * date values *MUST* be output as ISO 8601 (e.g. through a date picker);
+> * license URI *MUST* be one of the Creative Commons canonical license URIs (e.g. through a pickable list);
+> * language codes *MUST* be BCP 47.
+
+### Validate dataset descriptions ### {#validate-dataset-descriptions}
+
+> [=Collection management systems=] *MUST NOT* allow invalid dataset descriptions to be published.
+> They *MUST* run the current NDE SHACL shapes against each dataset description
+> and *MUST* surface any violations and warnings to [=collection managers=],
+> translated to plain language and mapped to the relevant form field.
+> In particular, they *MUST* communicate upcoming requirement changes
+> (such as newly required properties or changed data types) to collection managers in advance
+> by surfacing SHACL warnings.
+> Using the SHACL and/or validation API provided by NDE is *RECOMMENDED*.
+
+Whether validation happens during editing or at publish time is left to the [=vendor=].
+
+**Violations** indicate issues that must be fixed now to meet current requirements. They should rarely
+occur in [=collection management systems=] that implement [[#required]], [[#enforce-valid-input]], and [[#edit]],
+as the form already prevents them. When they do appear, they typically concern *existing* descriptions:
+legacy data that predates the current form, or data affected by shape rules added after the form was last updated.
+
+**Warnings** indicate issues that must be fixed before the next major version of the requirements.
+They are expected to occur on new data as well, as they represent behaviour that the [=Dataset Register=]
+tolerates today but will enforce in the future. [=Vendors=] *SHOULD* add form fields for upcoming
+requirements as soon as they are announced, so [=collection managers=] have sufficient time to update
+their descriptions before the next major version rejects them. The [[NDE-CMS#staying-up-to-date|migration path for new requirements]]
+relies on surfacing warnings early and giving [=collection managers=] the means to act on them.
+
+### Show help texts ### {#show-help-texts}
+
+> [=Collection management systems=] *SHOULD* show help texts for all input fields to [=collection managers=].
+
+NDE will provide help texts that [=vendors=] may use freely.
+
+### Provide default values ### {#provide-default-values}
+
+> [=Collection management systems=] *SHOULD* provide sensible default values for form fields where applicable.
+
+For example: a default license such as CC0, the publisher name and identifier pre-filled
+from the organisation's account settings.
+
+### Auto-fill system-determined fields ### {#auto-fill}
+
+> [=Collection management systems=] *MUST* automatically fill fields whose values the system can determine,
+> without requiring input from [=collection managers=].
+
+For example:
+
+* `schema:dateCreated` – set when the dataset description is first created;
+* `schema:dateModified` – updated whenever the dataset description changes;
+* `schema:datePublished` – set when the dataset description is first published;
+* `schema:includedInDataCatalog` – determined by the [=collection management system=].
+
+### Publish dataset descriptions ### {#publish}
+
+> [=Collection management systems=] *MUST* publish valid dataset descriptions to the [=registration URL=].
+> Changes to dataset descriptions *MUST* be validated and, if valid,
+> immediately propagated to the registration URL.
+> If invalid, the validation results *MUST* be reported to [=collection managers=].
+
+Publishing happens continuously, regardless of whether the registration URL has been registered
+with the [=Dataset Register=].
+
+### Register with the Dataset Register ### {#register}
+
+> [=Collection managers=] *MUST* have control over when to register the [=registration URL=]
+> with the [=Dataset Register=] directly from the [=collection management system=].
+> A clear indication *MUST* be given to collection managers that the dataset description
+> is registered in the Dataset Register.
+
+Registration can also be done through a catalog of dataset descriptions submitted via a single registration URL.
+The Dataset Register will automatically re-crawl the registration URL to pick up changes.
+
+### Remove datasets ### {#remove}
+
+> [=Collection managers=] *MUST* be able to remove datasets from the [=Dataset Register=] in the [=collection management system=].
+> When removing or unpublishing a dataset, the dataset description *MUST* be removed from the [=registration URL=].
+> - In case of a single dataset, a 410 *MUST* be returned from the registration URL.
+> - If the unpublished dataset was part of a catalog, the dataset *MUST* be removed from that catalog.
+
+### Dataset Register detail page ### {#detail-page}
+
+> [=Collection management systems=] *MAY* show a link to the [=Dataset Register=] detail page for each dataset.
+> If shown, the link *MUST* have the format
+> `https://datasetregister.netwerkdigitaalerfgoed.nl/datasets/<dataset URI>`.
+
+This allows [=collection managers=] to quickly view and validate the dataset description
+as published in the [=Dataset Register=], as well as insights generated by the Dataset Knowledge Graph.
+
+
+Distributions {#distributions}
+------------------------------
+
+### Auto-add distributions ### {#auto-add-distributions}
+
+> [=Collection management systems=] *MUST* automatically add [[NDE-DATASETS#distribution|distributions]]
+> to dataset descriptions, including all [[NDE-DATASETS#distribution-attributes|required distribution attributes]].
+> All [[NDE-DATASETS#distribution-attributes|recommended distribution attributes]] *SHOULD* be included.
+> The `schema:contentUrl` *MUST* be reachable and *MUST* return the declared `schema:encodingFormat` as Content-Type.
+
+While [=collection managers=] own the dataset information, distributions (such as a SPARQL endpoint or RDF download)
+are provided by the [=collection management system=]’s infrastructure and should therefore be added automatically
+to the dataset description.
+
+### Keep distributions up to date ### {#keep-distributions-up-to-date}
+
+> Updates made by [=collection managers=] to heritage object records
+> *MUST* be reflected in the dataset’s [[NDE-DATASETS#distribution|distributions]] as soon as possible.
+
+For example, changes are reflected immediately in a SPARQL endpoint,
+or included in the next run of a periodic data dump.
+
 
 Changes {#changes}
 =====================
 
-This section lists notable changes to this specification.
-
 <!-- CHANGELOG-START -->
 <!-- CHANGELOG-END -->
-
-Test build: d929bb9
