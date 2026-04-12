@@ -3,7 +3,7 @@ Title: Requirements for Dataset Register Implementations
 Shortname: nde-dataset-register-implementations
 Level: 1
 Status: LS
-!Version: 0.0.0
+!Version: <a href="#v0.1.0">0.1.0</a>
 Markup Shorthands: css yes, markdown yes
 URL: https://docs.nde.nl/requirements-dataset-register-implementations/
 Editor: David de Boer, Netwerk Digitaal Erfgoed https://www.netwerkdigitaalerfgoed.nl, david@ddeboer.nl, https://github.com/ddeboer
@@ -207,4 +207,8 @@ Changes {#changes}
 =====================
 
 <!-- CHANGELOG-START -->
+Version 0.1.0 (2026-04-12) {#v0.1.0}
+----------
+
+- Add candidate requirements for Dataset Register implementations ([55c475c](https://github.com/netwerk-digitaal-erfgoed/requirements-dataset-register-implementations/commit/55c475c615a3b2fe9808d63541de08c072387a5c)).
 <!-- CHANGELOG-END -->
