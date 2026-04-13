@@ -36,6 +36,7 @@ Definitions {#definitions}
 
 : <dfn>Collection management system</dfn>
 :: A software application for creating, editing, and publishing metadata records that implements the [=Dataset Register=] API.
+    The system may include a separate publication component or layer that wraps the core application. For the purpose of this document, the system is treated as a whole: it does not matter whether the dataset description, publication, and registration with the [=Dataset Register=] are handled by the core application itself or by a publication layer or component on top of it.
 
 : <dfn>Dataset Register</dfn>
 :: An NDE service that allows institutions to register and publish dataset descriptions, making them findable through the [Dataset Register API](https://datasetregister.netwerkdigitaalerfgoed.nl/api/)
