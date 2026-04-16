@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/netwerk-digitaal-erfgoed/requirements-dataset-register-implementations/compare/0.1.1...0.2.0) (2026-04-16)
+
+
+### Features
+
+* strengthen Create datasets requirement ([#7](https://github.com/netwerk-digitaal-erfgoed/requirements-dataset-register-implementations/issues/7)) ([f867ddd](https://github.com/netwerk-digitaal-erfgoed/requirements-dataset-register-implementations/commit/f867ddd9a38d84e53137f5e70010b08f4431eb1d))
+
 ## [0.1.1](https://github.com/netwerk-digitaal-erfgoed/requirements-dataset-register-implementations/compare/0.1.0...0.1.1) (2026-04-13)
 
 
