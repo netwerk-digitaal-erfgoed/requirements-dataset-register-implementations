@@ -58,10 +58,14 @@ Manage dataset descriptions {#manage}
 
 ### Create datasets ### {#create}
 
-> [=Collection managers=] *MUST* be able to create datasets  by themselves in the [=collection management system=]
+> [=Collection managers=] *MUST* be able to create datasets by themselves in the [=collection management system=]
 > without requiring technical knowledge.
-They *MUST* be able to select heritage objects to be included
+> 
+> Collection managers *MUST* be able to select heritage objects to be included
 > in datasets, either manually or through filters (such as terms) that automatically include matching objects.
+>
+> Collection managers *MUST* be able to create any number of datasets, ranging from a single large dataset
+> that covers the entire collection to multiple smaller datasets.
 
 This gives collection managers the ability to determine the boundaries of their datasets,
 and to decide between (e.g.) creating a single large dataset or any number of smaller datasets.
